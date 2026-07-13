@@ -1,0 +1,283 @@
+{% extends request.user.is_staff|yesno:"base_admin.html,base_teknisi.html" %}
+
+{% block title %}Detail Laporan - Admin SINAR{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <!-- Header with Back Button -->
+    <div class="flex items-center gap-4 mb-6">
+        <a href="{% url 'laporan_list' %}" class="flex items-center justify-center w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </a>
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">{{ laporan.judul }}</h2>
+        </div>
+    </div>
+
+    <form method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-6" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Left Column: Laporan Info & Solusi -->
+        <div class="lg:col-span-2 flex flex-col gap-6">
+            
+            <!-- Info Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-3">Informasi Pelapor</h3>
+                
+                <div class="grid grid-cols-2 gap-y-6 gap-x-8 mb-6">
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Nama</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 overflow-hidden">
+                                <img src="https://ui-avatars.com/api/?name={{ laporan.pelapor.username }}&background=f3f4f6&color=4b5563" alt="Avatar" class="w-full h-full object-cover">
+                            </div>
+                            <span class="font-medium text-gray-800 text-sm">{{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Bidang</p>
+                        <span class="font-medium text-gray-800 text-sm">{{ laporan.bidang.nama|default:"-" }}</span>
+                    </div>
+
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Kategori Masalah</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">{{ laporan.get_kategori_display }}</span>
+                    </div>
+
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Teknisi Bertugas</p>
+                        <span class="font-medium text-gray-800 text-sm">
+                            {% if laporan.teknisi_bertugas %}
+                                {{ laporan.teknisi_bertugas.get_full_name|default:laporan.teknisi_bertugas.username }}
+                            {% else %}
+                                <span class="text-gray-400 italic">Belum Ditugaskan</span>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Dilaporkan Pada</p>
+                        <span class="font-medium text-gray-800 text-sm">{{ laporan.created_at|date:"d M Y - H:i" }}</span>
+                    </div>
+                    
+                    {% if laporan.estimasi_mulai %}
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Estimasi Mulai</p>
+                        <span class="font-medium text-gray-800 text-sm">{{ laporan.estimasi_mulai|date:"d M Y - H:i" }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if laporan.estimasi_penanganan %}
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Estimasi Selesai</p>
+                        <span class="font-medium text-gray-800 text-sm">{{ laporan.estimasi_penanganan|date:"d M Y - H:i" }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">No. WhatsApp</p>
+                        <span class="font-medium text-gray-800 text-sm">
+                            {% if laporan.pelapor.nomor_telepon %}
+                                <a href="https://wa.me/{{ laporan.pelapor.nomor_telepon }}" target="_blank" class="text-green-600 hover:underline flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    {{ laporan.pelapor.nomor_telepon }}
+                                </a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-2">Deskripsi</p>
+                    <div class="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed border border-gray-100">
+                        {{ laporan.deskripsi }}
+                    </div>
+                </div>
+
+                {% if laporan.lampiran %}
+                <div class="mt-6">
+                    <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-2">Lampiran Pelapor</p>
+                    <a href="{{ laporan.lampiran.url }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-sm font-medium transition-colors border border-blue-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                        Lihat Lampiran
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Solusi & Simpan Perubahan -->
+            <div class="mt-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">Solusi yang Diberikan</h3>
+                <textarea name="solusi" rows="4" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-3 mb-4" placeholder="Contoh: Kabel LAN di ruang rapat lantai 2 yang terputus/terkelupas telah ditarik dan diganti dengan kabel baru. Koneksi sudah dites dan berfungsi normal.">{{ laporan.solusi|default_if_none:"" }}</textarea>
+                
+                <h3 class="text-sm font-bold text-gray-800 mb-2">Unggah Foto Bukti (Opsional)</h3>
+                {% if laporan.bukti_penyelesaian %}
+                    <div class="mb-4">
+                        <p class="text-xs text-gray-500 mb-2">Bukti Saat Ini:</p>
+                        <img src="{{ laporan.bukti_penyelesaian.url }}" alt="Bukti" class="max-w-xs rounded-lg border border-gray-200">
+                    </div>
+                {% endif %}
+                <input type="file" name="bukti_penyelesaian" accept="image/*" class="block w-full text-sm text-gray-900 border border-gray-200 rounded-lg cursor-pointer bg-gray-50 focus:outline-none mb-6">
+                
+                <button type="submit" class="w-full text-white bg-primary hover:bg-primary-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors">
+                    Simpan Perubahan
+                </button>
+            </div>
+            
+            {% if laporan.rating %}
+            <div class="mt-8 border-t border-gray-100 pt-6">
+                <h3 class="text-sm font-bold text-gray-800 mb-4">Penilaian Pelanggan</h3>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <div class="flex items-center gap-1 mb-2">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= laporan.rating %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                            {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="text-sm text-gray-700 italic">"{{ laporan.ulasan|default:"Tidak ada ulasan." }}"</p>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Right Column: Status Update -->
+        <div class="lg:col-span-1">
+            <div class="bg-slate-50 rounded-xl shadow-sm border border-gray-100 p-6 sticky top-6">
+                {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                    <div class="p-3 text-sm text-green-700 bg-green-100 rounded-lg">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <h3 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-3">Pembaruan Status</h3>
+                
+                <div class="flex flex-col gap-3 mb-6">
+                    <!-- Status: Menunggu -->
+                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm {% if laporan.status == 'menunggu' %}border-blue-500 bg-blue-50{% else %}border-gray-200 hover:bg-gray-50{% endif %} focus:outline-none">
+                        <input type="radio" name="status" value="menunggu" class="sr-only" {% if laporan.status == 'menunggu' %}checked{% endif %}>
+                        <span class="flex flex-1">
+                            <span class="flex flex-col">
+                                <span class="block text-sm font-medium {% if laporan.status == 'menunggu' %}text-blue-900{% else %}text-gray-900{% endif %}">Menunggu</span>
+                                <span class="mt-1 flex items-center text-xs {% if laporan.status == 'menunggu' %}text-blue-700{% else %}text-gray-500{% endif %}">Laporan baru masuk</span>
+                            </span>
+                        </span>
+                        {% if laporan.status == 'menunggu' %}
+                        <svg class="h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                        {% endif %}
+                    </label>
+
+                    <!-- Status: Diproses -->
+                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm {% if laporan.status == 'diproses' %}border-blue-500 bg-blue-50{% else %}border-gray-200 hover:bg-gray-50{% endif %} focus:outline-none">
+                        <input type="radio" name="status" value="diproses" class="sr-only" {% if laporan.status == 'diproses' %}checked{% endif %}>
+                        <span class="flex flex-1">
+                            <span class="flex flex-col">
+                                <span class="block text-sm font-medium {% if laporan.status == 'diproses' %}text-blue-900{% else %}text-gray-900{% endif %}">Diproses</span>
+                                <span class="mt-1 flex items-center text-xs {% if laporan.status == 'diproses' %}text-blue-700{% else %}text-gray-500{% endif %}">Tim sedang menangani</span>
+                            </span>
+                        </span>
+                        {% if laporan.status == 'diproses' %}
+                        <svg class="h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                        {% endif %}
+                    </label>
+
+                    <!-- Status: Selesai -->
+                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm {% if laporan.status == 'selesai' %}border-blue-500 bg-blue-50{% else %}border-gray-200 hover:bg-gray-50{% endif %} focus:outline-none">
+                        <input type="radio" name="status" value="selesai" class="sr-only" {% if laporan.status == 'selesai' %}checked{% endif %}>
+                        <span class="flex flex-1">
+                            <span class="flex flex-col">
+                                <span class="block text-sm font-medium {% if laporan.status == 'selesai' %}text-blue-900{% else %}text-gray-900{% endif %}">Selesai</span>
+                                <span class="mt-1 flex items-center text-xs {% if laporan.status == 'selesai' %}text-blue-700{% else %}text-gray-500{% endif %}">Masalah telah tuntas</span>
+                            </span>
+                        </span>
+                        {% if laporan.status == 'selesai' %}
+                        <svg class="h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                        {% endif %}
+                    </label>
+                </div>
+                
+                {% if request.user.is_staff %}
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <label for="prioritas" class="block text-sm font-bold text-gray-800 mb-2">Prioritas Laporan</label>
+                    <select name="prioritas" id="prioritas" class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                        <option value="level_1" {% if laporan.prioritas == 'level_1' %}selected{% endif %}>Level 1</option>
+                        <option value="level_2" {% if laporan.prioritas == 'level_2' %}selected{% endif %}>Level 2</option>
+                        <option value="level_3" {% if laporan.prioritas == 'level_3' %}selected{% endif %}>Level 3</option>
+                        <option value="level_4" {% if laporan.prioritas == 'level_4' %}selected{% endif %}>Level 4</option>
+                    </select>
+                </div>
+                {% else %}
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-sm font-bold text-gray-800 mb-2">Prioritas Laporan</p>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">{{ laporan.get_prioritas_display|default:"Level 1" }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <label for="estimasi_mulai" class="block text-sm font-bold text-gray-800 mb-2">Estimasi Mulai Dikerjakan</label>
+                    <input type="datetime-local" id="estimasi_mulai" name="estimasi_mulai" 
+                           value="{{ laporan.estimasi_mulai|date:'Y-m-d\TH:i' }}" 
+                           class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <label for="estimasi_penanganan" class="block text-sm font-bold text-gray-800 mb-2">Estimasi Selesai (Target)</label>
+                    <input type="datetime-local" id="estimasi_penanganan" name="estimasi_penanganan" 
+                           value="{{ laporan.estimasi_penanganan|date:'Y-m-d\TH:i' }}" 
+                           class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                </div>
+                
+
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // Simple script to toggle radio button active states visually
+    document.addEventListener("DOMContentLoaded", function() {
+        const labels = document.querySelectorAll('label:has(input[type="radio"])');
+        
+        labels.forEach(label => {
+            const input = label.querySelector('input');
+            
+            input.addEventListener('change', () => {
+                // Reset all
+                labels.forEach(l => {
+                    l.classList.remove('border-blue-500', 'bg-blue-50');
+                    l.classList.add('border-gray-200', 'hover:bg-gray-50');
+                    const title = l.querySelector('.text-blue-900');
+                    if(title) { title.classList.replace('text-blue-900', 'text-gray-900'); }
+                    const desc = l.querySelector('.text-blue-700');
+                    if(desc) { desc.classList.replace('text-blue-700', 'text-gray-500'); }
+                    const icon = l.querySelector('svg');
+                    if(icon) { icon.remove(); }
+                });
+
+                // Set active
+                if(input.checked) {
+                    label.classList.remove('border-gray-200', 'hover:bg-gray-50');
+                    label.classList.add('border-blue-500', 'bg-blue-50');
+                    const title = label.querySelector('.text-gray-900');
+                    if(title) { title.classList.replace('text-gray-900', 'text-blue-900'); }
+                    const desc = label.querySelector('.text-gray-500');
+                    if(desc) { desc.classList.replace('text-gray-500', 'text-blue-700'); }
+                    
+                    // Add checkmark icon
+                    label.insertAdjacentHTML('beforeend', '<svg class="h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

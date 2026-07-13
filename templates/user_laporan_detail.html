@@ -1,0 +1,175 @@
+{% extends 'base_user.html' %}
+
+{% block title %}Detail Laporan - SINAR{% endblock %}
+
+{% block nav_status_laporan %}bg-primary-hover bg-opacity-80{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header with Back Button -->
+    <div class="mb-8">
+        <a href="{% url 'status_laporan' %}" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-6 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali
+        </a>
+        <h2 class="text-3xl font-bold text-gray-800 tracking-tight">{{ laporan.judul }}</h2>
+    </div>
+
+    <!-- Main Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-blue-200 overflow-hidden">
+        <div class="p-8">
+
+
+            <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Pelapor</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12 mb-8">
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">NAMA</p>
+                    <p class="text-base font-medium text-gray-800">{{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}</p>
+                </div>
+                
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">BIDANG</p>
+                    <p class="text-base font-medium text-gray-800">{{ laporan.bidang.nama|default:"-" }}</p>
+                </div>
+
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">KATEGORI MASALAH</p>
+                    <p class="text-base text-gray-600">{{ laporan.get_kategori_display }}</p>
+                </div>
+
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">STATUS</p>
+                    {% if laporan.status == 'menunggu' %}
+                        <span class="inline-flex items-center px-3 py-1 rounded text-sm font-medium bg-red-400 text-white">Menunggu</span>
+                    {% elif laporan.status == 'diproses' %}
+                        <span class="inline-flex items-center px-3 py-1 rounded text-sm font-medium bg-yellow-400 text-white">Diproses</span>
+                    {% elif laporan.status == 'selesai' %}
+                        <span class="inline-flex items-center px-3 py-1 rounded text-sm font-medium bg-green-500 text-white">Selesai</span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">TEKNISI BERTUGAS</p>
+                    <p class="text-base font-medium text-gray-800">
+                        {% if laporan.teknisi_bertugas %}
+                            {{ laporan.teknisi_bertugas.get_full_name|default:laporan.teknisi_bertugas.username }}
+                        {% else %}
+                            <span class="text-gray-400 italic">Belum Ditugaskan</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">DILAPORKAN PADA</p>
+                    <p class="text-base font-medium text-gray-800">{{ laporan.created_at|date:"d M Y - H:i" }}</p>
+                </div>
+                
+                {% if laporan.estimasi_mulai %}
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">ESTIMASI MULAI DIKERJAKAN</p>
+                    <p class="text-base font-medium text-gray-800">{{ laporan.estimasi_mulai|date:"d M Y - H:i" }}</p>
+                </div>
+                {% endif %}
+                
+                {% if laporan.estimasi_penanganan %}
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">ESTIMASI SELESAI</p>
+                    <p class="text-base font-medium text-gray-800">{{ laporan.estimasi_penanganan|date:"d M Y - H:i" }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <hr class="border-gray-100 mb-8">
+
+            <div class="mb-8">
+                <p class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-4">DESKRIPSI MASALAH</p>
+                <p class="text-base text-gray-600 leading-relaxed whitespace-pre-wrap">{{ laporan.deskripsi }}</p>
+            </div>
+            
+            {% if laporan.lampiran %}
+            <div class="mb-8">
+                <p class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-4">LAMPIRAN</p>
+                <a href="{{ laporan.lampiran.url }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-sm font-medium transition-colors border border-blue-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    Lihat Lampiran
+                </a>
+            </div>
+            {% endif %}
+
+            <hr class="border-gray-100 mb-8">
+
+            <div>
+                <p class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-4">SOLUSI YANG DI BERIKAN</p>
+                <p class="text-base text-gray-600 leading-relaxed whitespace-pre-wrap">{% if laporan.solusi %}{{ laporan.solusi }}{% else %}<span class="italic text-gray-400">Belum ada solusi yang diberikan.</span>{% endif %}</p>
+            </div>
+            
+            {% if laporan.bukti_penyelesaian %}
+            <div class="mt-8">
+                <p class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-4">FOTO BUKTI PENYELESAIAN</p>
+                <img src="{{ laporan.bukti_penyelesaian.url }}" alt="Bukti Penyelesaian" class="max-w-md w-full rounded-lg border border-gray-200">
+            </div>
+            {% endif %}
+
+            {% if laporan.status == 'selesai' %}
+            <hr class="border-gray-100 my-8">
+            <h3 class="text-lg font-bold text-gray-800 mb-6">Penilaian (Kepuasan Pelanggan)</h3>
+            
+            {% if laporan.rating %}
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                    <div class="flex items-center gap-1 mb-3">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= laporan.rating %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                            {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="text-gray-700 italic">"{{ laporan.ulasan|default:"Tidak ada ulasan." }}"</p>
+                </div>
+            {% else %}
+                <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                    <p class="text-sm text-blue-800 mb-4 font-medium">Bantu kami menjadi lebih baik dengan memberikan penilaian atas pelayanan teknisi kami.</p>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Beri Bintang (1-5)</label>
+                            <select name="rating" required class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="">Pilih Penilaian...</option>
+                                <option value="5">⭐⭐⭐⭐⭐ (Sangat Puas)</option>
+                                <option value="4">⭐⭐⭐⭐ (Puas)</option>
+                                <option value="3">⭐⭐⭐ (Cukup)</option>
+                                <option value="2">⭐⭐ (Kurang)</option>
+                                <option value="1">⭐ (Sangat Kurang)</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Ulasan (Opsional)</label>
+                            <textarea name="ulasan" rows="3" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Tulis ulasan Anda di sini..."></textarea>
+                        </div>
+                        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kirim Penilaian</button>
+                    </form>
+                </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    {% if laporan.status == 'menunggu' %}
+    <div class="mt-8 flex items-center justify-end gap-4">
+        <a href="{% url 'batalkan_laporan' laporan.id %}" onclick="return confirm('Apakah Anda yakin ingin membatalkan dan menghapus laporan ini secara permanen?');" class="bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 text-sm font-semibold py-2.5 px-6 rounded-md shadow-sm transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+            Batalkan Laporan
+        </a>
+        <a href="{% url 'ubah_laporan' laporan.id %}" class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold py-2.5 px-6 rounded-md shadow-sm transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Ubah Laporan
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

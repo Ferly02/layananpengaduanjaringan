@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard - SINAR{% endblock %}</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0056b3',
+                        'primary-hover': '#1a70c8',
+                        'bg-light': '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans antialiased h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-primary text-white flex flex-col justify-between h-full flex-shrink-0">
+        <div>
+            <!-- Logo Section -->
+            <div class="p-6">
+                <h1 class="text-2xl font-bold tracking-wide">SINAR</h1>
+                <p class="text-xs text-blue-200 mt-1">Layanan Pengaduan Jaringan</p>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="mt-4 flex flex-col gap-1 px-3">
+                <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors {% block nav_beranda %}{% endblock %} hover:bg-primary-hover">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                    <span class="font-medium">Beranda</span>
+                </a>
+                
+                <a href="{% url 'laporan_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors {% block nav_laporan %}{% endblock %} hover:bg-primary-hover">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"/><polyline points="14 2 14 8 20 8"/><path d="M5 11h8"/><path d="M5 15h5"/></svg>
+                    <span class="font-medium">Daftar Laporan</span>
+                </a>
+                
+                <a href="{% url 'edit_profil' %}" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors {% block nav_profil %}{% endblock %} hover:bg-primary-hover">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span class="font-medium">Profil</span>
+                </a>
+            </nav>
+        </div>
+        
+        <!-- Logout -->
+        <div class="p-4 mb-4">
+            <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors hover:bg-primary-hover text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                <span class="font-medium">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden">
+        
+        <!-- Top Navbar -->
+        <header class="bg-white h-16 border-b border-gray-200 flex items-center justify-end px-8 shrink-0">
+            <div class="flex items-center gap-6">
+                <!-- Profile -->
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-semibold text-gray-700">{{ request.user.username|default:"Admin" }}</span>
+                    <div class="w-8 h-8 rounded-full bg-gray-200 border border-gray-300 overflow-hidden">
+                        {% if request.user.foto_profil %}
+                            <img src="{{ request.user.foto_profil.url }}" alt="Profile" class="w-full h-full object-cover">
+                        {% else %}
+                            <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=0D8ABC&color=fff" alt="Profile" class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Scrollable Area -->
+        <main class="flex-1 overflow-y-auto p-8">
+            {% block content %}
+            <!-- Content goes here -->
+            {% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

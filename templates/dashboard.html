@@ -1,0 +1,470 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Beranda - Admin SINAR{% endblock %}
+
+{% block nav_beranda %}bg-primary-hover bg-opacity-80{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- Header Text & Actions -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-800 tracking-tight">Selamat Datang, Admin!</h2>
+            <p class="text-gray-500 mt-2 text-sm">Pantau seluruh operasional IT dan kelola laporan pegawai di sini.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="{% url 'buat_teknisi' %}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                Buat Akun Teknisi
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        
+        <!-- Card 1 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-36">
+            <div class="flex justify-between items-start">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                </div>
+                <span class="text-xs font-medium px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full">Hari Ini</span>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 font-medium mb-1">Total laporan Masuk</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ total }}</h3>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-36">
+            <div class="flex justify-between items-start">
+                <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>
+                </div>
+                <span class="text-xs font-medium px-2.5 py-1 bg-orange-100 text-orange-700 rounded-full">Urgent</span>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 font-medium mb-1">Menunggu</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ menunggu }}</h3>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-36">
+            <div class="flex justify-between items-start">
+                <div class="w-10 h-10 rounded-lg bg-blue-500 text-white flex items-center justify-center shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 font-medium mb-1">Sedang Diproses</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ diproses }}</h3>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-36">
+            <div class="flex justify-between items-start">
+                <div class="w-10 h-10 rounded-full bg-green-50 text-green-500 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 font-medium mb-1">Laporan Selesai</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ selesai }}</h3>
+            </div>
+        </div>
+        
+
+    </div>
+
+
+
+    <!-- Chart Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Bar Chart -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div class="flex items-center gap-4">
+                    <h3 class="text-xl font-bold text-gray-800">Statistik Laporan</h3>
+                    <select id="monthPicker" class="hidden appearance-none bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors">
+                        <option value="1">Januari</option>
+                        <option value="2">Februari</option>
+                        <option value="3">Maret</option>
+                        <option value="4">April</option>
+                        <option value="5">Mei</option>
+                        <option value="6">Juni</option>
+                        <option value="7">Juli</option>
+                        <option value="8">Agustus</option>
+                        <option value="9">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                    <select id="weekPicker" class="appearance-none bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors">
+                        <option value="1">Minggu ke-1</option>
+                        <option value="2">Minggu ke-2</option>
+                        <option value="3">Minggu ke-3</option>
+                        <option value="4">Minggu ke-4</option>
+                        <option value="5">Minggu ke-5</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <!-- Legend -->
+                    <div class="flex items-center gap-4 text-xs text-gray-600 font-medium hidden md:flex">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-100 border border-blue-200"></span> Total Laporan Masuk
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-orange-400"></span> Menunggu
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> Sedang Diproses
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-600"></span> Selesai
+                        </div>
+                    </div>
+
+                    <!-- Toggle -->
+                    <div class="flex bg-gray-100 rounded-lg p-1">
+                        <button id="btnMinggu" class="px-4 py-1.5 text-xs font-semibold bg-white text-blue-600 rounded-md shadow-sm">Minggu</button>
+                        <button id="btnBulan" class="px-4 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700">Bulan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas for Chart.js -->
+            <div class="w-full h-72">
+                <canvas id="laporanChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Category Doughnut Chart -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col">
+             <h3 class="text-xl font-bold text-gray-800 mb-6">Kategori Masalah</h3>
+             <div class="w-full flex-1 flex items-center justify-center min-h-[250px]">
+                 <canvas id="kategoriChart"></canvas>
+             </div>
+             <p id="noKategoriData" class="text-center text-gray-500 text-sm hidden mt-10">Belum ada data laporan.</p>
+        </div>
+    </div>
+    
+    <!-- Secondary Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <!-- Bidang Doughnut Chart -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col">
+             <h3 class="text-xl font-bold text-gray-800 mb-6">Laporan per Bidang</h3>
+             <div class="w-full flex-1 flex items-center justify-center min-h-[250px]">
+                 <canvas id="bidangChart"></canvas>
+             </div>
+             <p id="noBidangData" class="text-center text-gray-500 text-sm hidden mt-10">Belum ada data.</p>
+        </div>
+
+        <!-- Leaderboard Teknisi -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col">
+             <h3 class="text-xl font-bold text-gray-800 mb-6">Peringkat Teknisi (Tiket Selesai)</h3>
+             <div class="w-full flex-1 overflow-x-auto">
+                 <table class="w-full text-sm text-left text-gray-500">
+                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                         <tr>
+                             <th scope="col" class="px-6 py-3">Nama Teknisi</th>
+                             <th scope="col" class="px-6 py-3">Tiket Selesai</th>
+                             <th scope="col" class="px-6 py-3">Rata-rata Rating</th>
+                         </tr>
+                     </thead>
+                     <tbody id="leaderboardBody">
+                        <!-- Populated by JS -->
+                     </tbody>
+                 </table>
+             </div>
+             <p id="noLeaderboardData" class="text-center text-gray-500 text-sm hidden mt-10">Belum ada penyelesaian di periode ini.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('laporanChart').getContext('2d');
+        let chartInstance = null;
+        
+        const ctxKategori = document.getElementById('kategoriChart').getContext('2d');
+        let kategoriChartInstance = null;
+        
+        let currentPeriod = 'minggu';
+        let currentMonth = new Date().getMonth() + 1;
+        let currentYear = new Date().getFullYear();
+        let currentWeek = Math.ceil(new Date().getDate() / 7);
+        if (currentWeek > 5) currentWeek = 5;
+        
+        const monthPicker = document.getElementById('monthPicker');
+        const weekPicker = document.getElementById('weekPicker');
+        monthPicker.value = currentMonth;
+        weekPicker.value = currentWeek;
+
+        const btnMinggu = document.getElementById('btnMinggu');
+        const btnBulan = document.getElementById('btnBulan');
+
+        monthPicker.addEventListener('change', (e) => {
+            currentMonth = e.target.value;
+            fetchChartData();
+        });
+
+        weekPicker.addEventListener('change', (e) => {
+            currentWeek = e.target.value;
+            fetchChartData();
+        });
+        
+        function fetchChartData() {
+
+            fetch(`/api/chart-data/?period=${currentPeriod}&month=${currentMonth}&year=${currentYear}&week=${currentWeek}`)
+                .then(response => response.json())
+                .then(data => {
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false,
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawBorder: false,
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 11
+                                        },
+                                        color: '#6b7280'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    max: 20,
+                                    ticks: {
+                                        stepSize: 5,
+                                        precision: 0,
+                                        font: {
+                                            size: 11
+                                        },
+                                        color: '#6b7280'
+                                    },
+                                    grid: {
+                                        color: '#f3f4f6',
+                                        drawBorder: false,
+                                    }
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest',
+                                axis: 'x',
+                                intersect: false
+                            }
+                        }
+                    };
+
+                    if (chartInstance) {
+                        chartInstance.data = data;
+                        chartInstance.update();
+                    } else {
+                        chartInstance = new Chart(ctx, config);
+                    }
+                    
+                    // Render Kategori Chart
+                    const hasKategoriData = data.category_data && data.category_data.length > 0;
+                    const chartCanvas = document.getElementById('kategoriChart');
+                    const noDataMsg = document.getElementById('noKategoriData');
+                    
+                    if (!hasKategoriData) {
+                        chartCanvas.style.display = 'none';
+                        noDataMsg.classList.remove('hidden');
+                    } else {
+                        chartCanvas.style.display = 'block';
+                        noDataMsg.classList.add('hidden');
+                        
+                        const configKategori = {
+                            type: 'doughnut',
+                            data: {
+                                labels: data.category_labels,
+                                datasets: [{
+                                    data: data.category_data,
+                                    backgroundColor: [
+                                        '#3b82f6', '#f59e0b', '#10b981', '#ef4444', 
+                                        '#8b5cf6', '#06b6d4', '#f97316'
+                                    ],
+                                    borderWidth: 0,
+                                    hoverOffset: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                let label = context.label || '';
+                                                if (label) {
+                                                    label += ': ';
+                                                }
+                                                const total = context.chart._metasets[context.datasetIndex].total;
+                                                const value = context.parsed;
+                                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '0%';
+                                                label += value + ' (' + percentage + ')';
+                                                return label;
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        position: 'bottom',
+                                        labels: {
+                                            usePointStyle: true,
+                                            padding: 15,
+                                            font: {
+                                                size: 11
+                                            },
+                                            generateLabels: function(chart) {
+                                                const data = chart.data;
+                                                if (data.labels.length && data.datasets.length) {
+                                                    const dataset = data.datasets[0];
+                                                    const total = dataset.data.reduce((acc, current) => acc + current, 0);
+                                                    return data.labels.map((label, i) => {
+                                                        const meta = chart.getDatasetMeta(0);
+                                                        const style = meta.controller.getStyle(i);
+                                                        const value = dataset.data[i];
+                                                        const percentage = total > 0 ? Math.round((value / total) * 100) + '%' : '0%';
+                                                        return {
+                                                            text: `${label} - ${percentage}`,
+                                                            fillStyle: style.backgroundColor,
+                                                            strokeStyle: style.borderColor,
+                                                            lineWidth: style.borderWidth,
+                                                            hidden: isNaN(dataset.data[i]) || meta.data[i].hidden,
+                                                            index: i
+                                                        };
+                                                    });
+                                                }
+                                                return [];
+                                            }
+                                        }
+                                    }
+                                },
+                                cutout: '70%'
+                            }
+                        };
+                        
+                        if (kategoriChartInstance) {
+                            kategoriChartInstance.data = configKategori.data;
+                            kategoriChartInstance.update();
+                        } else {
+                            kategoriChartInstance = new Chart(ctxKategori, configKategori);
+                        }
+                    }
+                    
+
+                    
+                    // Render Leaderboard
+                    const lbBody = document.getElementById('leaderboardBody');
+                    const noLb = document.getElementById('noLeaderboardData');
+                    lbBody.innerHTML = '';
+                    if (data.leaderboard && data.leaderboard.length > 0) {
+                        noLb.classList.add('hidden');
+                        data.leaderboard.forEach(tek => {
+                            const tr = document.createElement('tr');
+                            tr.className = "bg-white border-b";
+                            tr.innerHTML = `
+                                <td class="px-6 py-4 font-medium text-gray-900">${tek.name}</td>
+                                <td class="px-6 py-4 text-green-600 font-bold">${tek.completed}</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 text-yellow-300 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                        ${tek.avg_rating}
+                                    </div>
+                                </td>
+                            `;
+                            lbBody.appendChild(tr);
+                        });
+                    } else {
+                        noLb.classList.remove('hidden');
+                    }
+                    
+                    // Render Bidang Chart
+                    const hasBidangData = data.bidang_data && data.bidang_data.length > 0;
+                    const chartBidangCanvas = document.getElementById('bidangChart');
+                    const noBidangMsg = document.getElementById('noBidangData');
+                    if (!hasBidangData) {
+                        chartBidangCanvas.style.display = 'none';
+                        noBidangMsg.classList.remove('hidden');
+                    } else {
+                        chartBidangCanvas.style.display = 'block';
+                        noBidangMsg.classList.add('hidden');
+                        
+                        const configBidang = {
+                            type: 'doughnut',
+                            data: {
+                                labels: data.bidang_labels,
+                                datasets: [{
+                                    data: data.bidang_data,
+                                    backgroundColor: ['#8b5cf6', '#06b6d4', '#f97316', '#3b82f6', '#f59e0b', '#10b981', '#ef4444'],
+                                    borderWidth: 0,
+                                }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } } } }
+                        };
+                        
+                        if (window.bidangChartInstance) {
+                            window.bidangChartInstance.data = configBidang.data;
+                            window.bidangChartInstance.update();
+                        } else {
+                            const ctxB = document.getElementById('bidangChart').getContext('2d');
+                            window.bidangChartInstance = new Chart(ctxB, configBidang);
+                        }
+                    }
+                    
+                    // Update Export PDF URL
+                    const exportPdfBtn = document.getElementById('exportPdfBtn');
+                    if (exportPdfBtn) {
+                        exportPdfBtn.href = `/laporan/export-pdf/?period=${currentPeriod}&month=${currentMonth}&year=${currentYear}&week=${currentWeek}`;
+                    }
+                })
+                .catch(error => console.error('Error fetching chart data:', error));
+        }
+
+        fetchChartData();
+        setInterval(fetchChartData, 30000); // Update every 30 seconds
+
+        btnMinggu.addEventListener('click', () => {
+            currentPeriod = 'minggu';
+            monthPicker.classList.add('hidden');
+            weekPicker.classList.remove('hidden');
+            btnMinggu.className = "px-4 py-1.5 text-xs font-semibold bg-white text-blue-600 rounded-md shadow-sm";
+            btnBulan.className = "px-4 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700";
+            fetchChartData();
+        });
+
+        btnBulan.addEventListener('click', () => {
+            currentPeriod = 'bulan';
+            weekPicker.classList.add('hidden');
+            monthPicker.classList.remove('hidden');
+            btnBulan.className = "px-4 py-1.5 text-xs font-semibold bg-white text-blue-600 rounded-md shadow-sm";
+            btnMinggu.className = "px-4 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700";
+            fetchChartData();
+        });
+    });
+</script>
+{% endblock %}

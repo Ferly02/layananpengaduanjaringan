@@ -1,0 +1,194 @@
+{% extends 'base_teknisi.html' %}
+{% load static %}
+
+{% block title %}Dashboard Teknisi - SINAR{% endblock %}
+{% block nav_beranda %}bg-slate-700/50 text-white{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    
+    <!-- Messages -->
+    {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+                <div class="p-4 rounded-lg text-sm {% if message.tags == 'error' %}bg-red-50 text-red-600 border border-red-200{% elif message.tags == 'success' %}bg-emerald-50 text-emerald-600 border border-emerald-200{% else %}bg-blue-50 text-blue-600 border border-blue-200{% endif %} flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-3">
+                        {% if message.tags == 'success' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                        {% endif %}
+                        <span class="font-medium">{{ message }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Halo, {{ request.user.get_full_name|default:request.user.username }}! 👋</h2>
+            <p class="text-slate-500 mt-1">Berikut adalah daftar tugas perbaikan jaringan Anda.</p>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <!-- Menunggu -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="flex items-center gap-4 mb-4 relative z-10">
+                <div class="w-12 h-12 rounded-lg bg-red-50 flex items-center justify-center text-red-500 border border-red-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Laporan Menunggu</h3>
+                    <p class="text-3xl font-bold text-slate-800">{{ count_menunggu }}</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 relative z-10">Laporan baru yang butuh penanganan</p>
+        </div>
+
+        <!-- Tugas Saya -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+            </div>
+            <div class="flex items-center gap-4 mb-4 relative z-10">
+                <div class="w-12 h-12 rounded-lg bg-amber-50 flex items-center justify-center text-amber-500 border border-amber-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Tugas Aktif Saya</h3>
+                    <p class="text-3xl font-bold text-slate-800">{{ count_tugas }}</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 relative z-10">Sedang Anda proses saat ini</p>
+        </div>
+
+        <!-- Selesai -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="flex items-center gap-4 mb-4 relative z-10">
+                <div class="w-12 h-12 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500 border border-emerald-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Tugas Selesai</h3>
+                    <p class="text-3xl font-bold text-slate-800">{{ count_selesai }}</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 relative z-10">Total tugas yang berhasil diselesaikan</p>
+        </div>
+
+        <!-- Rating -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="flex items-center gap-4 mb-4 relative z-10">
+                <div class="w-12 h-12 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-500 border border-yellow-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Rating Saya</h3>
+                    <p class="text-3xl font-bold text-slate-800">{{ avg_rating }} <span class="text-lg text-slate-500 font-medium">/ 5.0</span></p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 relative z-10">Rata-rata kepuasan pelanggan</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Laporan Menunggu (Bursa Tiket) -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-[500px]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-xl">
+                <h3 class="text-lg font-bold text-slate-800">Laporan Baru Masuk (Menunggu)</h3>
+                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full">{{ count_menunggu }} Tiket</span>
+            </div>
+            <div class="p-5 overflow-y-auto flex-1">
+                {% if menunggu_list %}
+                    <div class="space-y-4">
+                        {% for lap in menunggu_list %}
+                            <div class="border border-slate-200 rounded-lg p-4 hover:border-slate-300 transition-colors shadow-sm bg-white group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-semibold text-slate-800 text-lg group-hover:text-blue-600 transition-colors"><a href="{% url 'laporan_detail' lap.id %}">{{ lap.judul }}</a></h4>
+                                    <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2 py-1 rounded border border-slate-200 whitespace-nowrap ml-2">{{ lap.get_kategori_display }}</span>
+                                </div>
+                                <p class="text-sm text-slate-600 line-clamp-2 mb-3">{{ lap.deskripsi }}</p>
+                                <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 mt-2">
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex items-center gap-1.5" title="Pelapor">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                            {{ lap.pelapor.get_full_name|default:lap.pelapor.username }} ({{ lap.bidang.nama|default:"-" }})
+                                        </div>
+                                        <div class="flex items-center gap-1.5" title="Waktu">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                            {{ lap.created_at|date:"d M Y, H:i" }}
+                                        </div>
+                                    </div>
+                                    <a href="{% url 'ambil_tiket' lap.id %}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded text-xs transition-colors flex items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                        Ambil Tiket
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="flex flex-col items-center justify-center h-full text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-3 opacity-50"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        <p class="text-sm font-medium">Belum ada laporan baru yang masuk.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Tugas Aktif Saya -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-[500px]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-xl">
+                <h3 class="text-lg font-bold text-slate-800">Tugas Aktif (Diproses)</h3>
+                <span class="bg-amber-100 text-amber-600 text-xs font-bold px-2 py-1 rounded-full">{{ count_tugas }} Tugas</span>
+            </div>
+            <div class="p-5 overflow-y-auto flex-1">
+                {% if tugas_saya %}
+                    <div class="space-y-4">
+                        {% for lap in tugas_saya %}
+                            <div class="border-l-4 border-amber-400 border-t border-b border-r border-slate-200 rounded-r-lg p-4 bg-white hover:bg-slate-50 transition-colors shadow-sm">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-semibold text-slate-800 text-lg"><a href="{% url 'laporan_detail' lap.id %}" class="hover:text-blue-600 transition-colors">{{ lap.judul }}</a></h4>
+                                </div>
+                                <div class="flex flex-col gap-2 mt-3 text-sm">
+                                    <div class="flex items-start gap-2 text-slate-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 text-slate-400"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        <span><strong class="text-slate-700 font-medium">Bidang:</strong> {{ lap.bidang.nama|default:"-" }}</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 text-slate-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 text-slate-400"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                        <span><strong class="text-slate-700 font-medium">Pelapor:</strong> {{ lap.pelapor.get_full_name|default:lap.pelapor.username }} ({{ lap.pelapor.nomor_telepon|default:"-" }})</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-100 flex justify-end">
+                                    <a href="{% url 'laporan_detail' lap.id %}" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                                        Update Status 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="flex flex-col items-center justify-center h-full text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-3 opacity-50"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="M9 15h6"/></svg>
+                        <p class="text-sm font-medium">Tidak ada tugas aktif yang sedang Anda kerjakan.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

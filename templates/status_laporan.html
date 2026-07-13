@@ -1,0 +1,134 @@
+{% extends 'base_user.html' %}
+
+{% block title %}Status Laporan - SINAR{% endblock %}
+
+{% block nav_status_laporan %}bg-primary-hover bg-opacity-80{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- Header Text -->
+    <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 tracking-tight">Daftar Laporan</h2>
+        <p class="text-gray-500 mt-2 text-sm">Kelola, pantau, dan selesaikan isu teknologi informasi.</p>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" action="{% url 'status_laporan' %}" class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6 flex flex-wrap gap-4 items-center">
+        <!-- Status Filter -->
+        <div class="relative min-w-[150px]">
+            <select name="status" onchange="this.form.submit()" class="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="" {% if not request.GET.status %}selected{% endif %}>Status</option>
+                <option value="menunggu" {% if request.GET.status == 'menunggu' %}selected{% endif %}>Menunggu</option>
+                <option value="diproses" {% if request.GET.status == 'diproses' %}selected{% endif %}>Diproses</option>
+                <option value="selesai" {% if request.GET.status == 'selesai' %}selected{% endif %}>Selesai</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+        </div>
+
+        <!-- Kategori Filter -->
+        <div class="relative min-w-[180px]">
+            <select name="kategori" onchange="this.form.submit()" class="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="" {% if not request.GET.kategori %}selected{% endif %}>Kategori masalah</option>
+                <option value="jaringan_terputus" {% if request.GET.kategori == 'jaringan_terputus' %}selected{% endif %}>Jaringan Terputus / Mati Total</option>
+                <option value="koneksi_lambat" {% if request.GET.kategori == 'koneksi_lambat' %}selected{% endif %}>Koneksi Lambat / Tidak Stabil</option>
+                <option value="pemasangan_baru" {% if request.GET.kategori == 'pemasangan_baru' %}selected{% endif %}>Pemasangan Jaringan Baru</option>
+                <option value="kendala_intranet" {% if request.GET.kategori == 'kendala_intranet' %}selected{% endif %}>Kendala Akses Intranet / Aplikasi Lokal</option>
+                <option value="kerusakan_fisik" {% if request.GET.kategori == 'kerusakan_fisik' %}selected{% endif %}>Kerusakan Fisik Perangkat Jaringan</option>
+                <option value="relokasi_titik" {% if request.GET.kategori == 'relokasi_titik' %}selected{% endif %}>Relokasi Titik Jaringan</option>
+                <option value="permintaan_konfigurasi" {% if request.GET.kategori == 'permintaan_konfigurasi' %}selected{% endif %}>Permintaan Konfigurasi Jaringan</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="relative flex-1 min-w-[250px]">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="text" name="q" value="{{ request.GET.q|default_if_none:'' }}" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Cari laporan berdasarkan &quot;judul&quot; dan &quot;bidang&quot;..." onkeypress="if(event.key === 'Enter'){this.form.submit();}">
+        </div>
+    </form>
+
+    <!-- Table Container -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-5 border-b border-gray-100">
+            <h3 class="font-bold text-gray-800">Daftar Laporan</h3>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-400 uppercase bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Bidang</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Pelapor</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Kategori Masalah</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Prioritas</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tanggal dan Waktu Lapor</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for laporan in laporans %}
+                    <tr class="hover:bg-gray-50 transition-colors cursor-pointer" data-href="{% url 'laporan_detail' laporan.id %}" onclick="window.location.href=this.dataset.href;">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-600">{{ laporan.bidang.nama|default:"-" }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full border-2 border-gray-300 overflow-hidden bg-gray-200">
+                                    {% if laporan.pelapor.foto_profil %}
+                                        <img src="{{ laporan.pelapor.foto_profil.url }}" alt="Avatar" class="w-full h-full object-cover">
+                                    {% else %}
+                                        <img src="https://ui-avatars.com/api/?name={{ laporan.pelapor.username }}&background=random&color=fff" alt="Avatar" class="w-full h-full object-cover">
+                                    {% endif %}
+                                </div>
+                                <span class="font-medium text-gray-800">{{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">{{ laporan.get_kategori_display }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if laporan.status == 'menunggu' %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-600">Menunggu</span>
+                            {% elif laporan.status == 'diproses' %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Diproses</span>
+                            {% else %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-600">Selesai</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium 
+                                {% if laporan.prioritas == 'level_1' %}bg-gray-100 text-gray-800
+                                {% elif laporan.prioritas == 'level_2' %}bg-blue-100 text-blue-800
+                                {% elif laporan.prioritas == 'level_3' %}bg-orange-100 text-orange-800
+                                {% elif laporan.prioritas == 'level_4' %}bg-red-100 text-red-800
+                                {% endif %}">
+                                {{ laporan.get_prioritas_display|default:"Level 1" }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-700 font-medium">{{ laporan.created_at|date:"d M Y - H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-gray-500">Belum ada laporan yang masuk.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="p-5 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+            <div>Menampilkan total {{ laporans.count }} tiket</div>
+            <div class="flex items-center gap-1">
+                <button class="px-3 py-1.5 text-gray-400 hover:text-gray-600 font-medium mr-2">Sebelumnya</button>
+                <button class="px-3 py-1.5 bg-blue-600 text-white rounded-md font-medium">1</button>
+                <button class="px-3 py-1.5 hover:bg-gray-100 rounded-md font-medium">2</button>
+                <button class="px-3 py-1.5 hover:bg-gray-100 rounded-md font-medium">3</button>
+                <button class="px-3 py-1.5 text-gray-800 hover:text-blue-600 font-medium ml-2">Selanjutnya</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

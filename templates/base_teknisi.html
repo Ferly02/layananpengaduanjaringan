@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Teknisi Dashboard - SINAR{% endblock %}</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e293b', // Slate-800
+                        'primary-hover': '#334155', // Slate-700
+                        'bg-light': '#f1f5f9', // Slate-100
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans antialiased h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-primary text-white flex flex-col justify-between h-full flex-shrink-0 shadow-lg z-20">
+        <div>
+            <!-- Logo Section -->
+            <div class="p-6 border-b border-slate-700">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-bold tracking-wide text-white">SINAR</h1>
+                    <span class="px-2 py-1 bg-blue-600 text-xs font-bold rounded-md">TEKNISI</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2">Layanan Pengaduan Jaringan</p>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="mt-6 flex flex-col gap-2 px-4">
+                <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {% block nav_beranda %}{% endblock %} hover:bg-primary-hover border border-transparent hover:border-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
+                    <span class="font-medium text-sm">Dashboard Tugas</span>
+                </a>
+                
+                <a href="{% url 'laporan_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {% block nav_laporan %}{% endblock %} hover:bg-primary-hover border border-transparent hover:border-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"/><polyline points="14 2 14 8 20 8"/><path d="M5 11h8"/><path d="M5 15h5"/></svg>
+                    <span class="font-medium text-sm">Semua Laporan</span>
+                </a>
+                
+                <a href="{% url 'edit_profil' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {% block nav_profil %}{% endblock %} hover:bg-primary-hover border border-transparent hover:border-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span class="font-medium text-sm">Profil</span>
+                </a>
+            </nav>
+        </div>
+        
+        <!-- Profile & Logout -->
+        <div class="p-4 border-t border-slate-700 bg-slate-800/50">
+            <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-red-500 hover:text-white text-slate-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                <span class="font-medium text-sm">Keluar</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
+        
+        <!-- Top Navbar -->
+        <header class="bg-white h-16 border-b border-slate-200 flex items-center justify-between px-8 shrink-0 shadow-sm z-10">
+            <div>
+                <span class="text-sm font-medium text-slate-500">Portal Teknisi Jaringan Diskominfosantik</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex flex-col items-end mr-2">
+                    <span class="text-sm font-bold text-slate-800">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="text-xs text-slate-500">Tim Teknisi</span>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-slate-300 overflow-hidden shadow-sm">
+                    {% if request.user.foto_profil %}
+                        <img src="{{ request.user.foto_profil.url }}" alt="Profile" class="w-full h-full object-cover">
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=1e293b&color=fff" alt="Profile" class="w-full h-full object-cover">
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Scrollable Area -->
+        <main class="flex-1 overflow-y-auto p-8 relative">
+            {% block content %}
+            <!-- Content goes here -->
+            {% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

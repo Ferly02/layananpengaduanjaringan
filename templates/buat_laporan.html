@@ -1,0 +1,143 @@
+{% extends 'base_user.html' %}
+
+{% block title %}Buat Laporan Baru - SINAR{% endblock %}
+
+{% block nav_buat_laporan %}bg-primary-hover bg-opacity-80{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header Text -->
+    <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 tracking-tight">Buat Laporan Baru</h2>
+        <p class="text-gray-500 mt-2 text-sm max-w-2xl">Sampaikan kendala teknis yang Anda alami. Tim Support kami akan meninjau dan menyelesaikan.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Main Form Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+            <!-- Blue Top Border Line -->
+            <div class="h-1 w-full bg-blue-500"></div>
+            
+            <div class="p-8 space-y-6">
+                <!-- Judul Laporan -->
+                <div>
+                    <label for="judul" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Judul Laporan <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="judul" name="judul" required 
+                        class="w-full bg-slate-100 border-none rounded-md px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400"
+                        placeholder="Contoh: Masalah Jaringan">
+                </div>
+
+                <!-- Nama -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Nama <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" value="{{ request.user.first_name|default:request.user.username }}" readonly 
+                        class="w-full bg-slate-100 border-none rounded-md px-4 py-3 text-sm text-gray-700 cursor-not-allowed opacity-80"
+                        placeholder="Masukkan nama Anda">
+                </div>
+
+                <!-- Kategori Masalah -->
+                <div>
+                    <label for="kategori" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Kategori Masalah <span class="text-red-500">*</span>
+                    </label>
+                    <select id="kategori" name="kategori" required 
+                        class="w-full bg-slate-100 border-none rounded-md px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 text-gray-700 appearance-none cursor-pointer">
+                        <option value="" disabled selected>Pilih kategori yang paling sesuai...</option>
+                        {% for value, label in kategori_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="text-xs text-gray-400 mt-1.5">Pilih kategori yang tepat untuk mempercepat penanganan.</p>
+                </div>
+
+
+
+                <!-- Bidang -->
+                <div>
+                    <label for="bidang" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Bidang <span class="text-red-500">*</span>
+                    </label>
+                    <select id="bidang" name="bidang" required
+                        class="w-full bg-slate-100 border-none rounded-md px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 text-gray-700 appearance-none cursor-pointer">
+                        <option value="" disabled selected>Contoh: Keuangan</option>
+                        {% for b in bidang_list %}
+                        <option value="{{ b.id }}">{{ b.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Tanggal dan Waktu -->
+                <div>
+                    <label for="tanggal_lapor" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Tanggal dan Waktu(Dilaporkan) <span class="text-red-500">*</span>
+                    </label>
+                    <input type="datetime-local" id="tanggal_lapor" name="tanggal_lapor" required 
+                        class="w-full bg-slate-100 border-none rounded-md px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 text-gray-700">
+                </div>
+
+                <!-- Deskripsi Masalah -->
+                <div>
+                    <label for="deskripsi" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Deskripsi Masalah <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="deskripsi" name="deskripsi" required rows="5"
+                        class="w-full bg-slate-100 border-none rounded-md px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400 resize-y"
+                        placeholder="Jelaskan secara detail masalah yang terjadi, pesan error (jika ada), dan langkah-langkah yang sudah Anda coba..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unggah Lampiran Card -->
+        <div class="bg-slate-50 border border-gray-200 rounded-xl overflow-hidden mb-8">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-start gap-4">
+                <div class="w-10 h-10 rounded-md bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-800">Unggah Lampiran</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Tambahkan screenshot atau log file untuk membantu tim menganalisa masalah. (Maks 50MB, format: JPG, PNG, PDF, MP4)</p>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <!-- Dropzone Area -->
+                <label for="lampiran" class="block w-full border-2 border-dashed border-gray-300 rounded-lg p-10 text-center cursor-pointer hover:bg-white hover:border-blue-400 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-blue-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <span class="block text-sm font-semibold text-gray-800 mb-1">Klik untuk mengunggah atau seret file ke sini</span>
+                    <span class="block text-xs text-gray-500 mb-4">Maksimal ukuran file 50MB</span>
+                    <span id="file-name-display" class="inline-block text-xs text-blue-600 font-medium">Belum ada file yang dipilih</span>
+                    <input type="file" id="lampiran" name="lampiran" class="hidden" accept=".jpg,.jpeg,.png,.pdf,.mp4" onchange="updateFileName(this)">
+                </label>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center justify-end gap-6 pb-12">
+            <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-blue-600 hover:text-blue-800">Batal</a>
+            <button type="submit" class="bg-primary hover:bg-primary-hover text-white text-sm font-semibold py-2.5 px-6 rounded-md shadow-sm transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Kirim Laporan
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function updateFileName(input) {
+    const display = document.getElementById('file-name-display');
+    if (input.files && input.files.length > 0) {
+        display.textContent = input.files[0].name;
+    } else {
+        display.textContent = 'Belum ada file yang dipilih';
+    }
+}
+</script>
+{% endblock %}

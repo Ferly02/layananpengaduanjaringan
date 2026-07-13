@@ -1,0 +1,247 @@
+{% extends 'base_user.html' %}
+
+{% block title %}Beranda - SINAR{% endblock %}
+
+{% block nav_beranda %}bg-primary-hover bg-opacity-80{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- Header Text -->
+    <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 tracking-tight">Selamat Datang, {{ request.user.first_name|default:request.user.username|default:"User" }}!</h2>
+        <p class="text-gray-500 mt-2 text-sm">Pantau dan kelola laporan masalah IT Anda di sini.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        
+
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-36">
+            <div class="flex justify-between items-start">
+                <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>
+                </div>
+                <span class="text-xs font-medium px-2.5 py-1 bg-orange-100 text-orange-700 rounded-full">Urgent</span>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 font-medium mb-1">Menunggu</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ menunggu }}</h3>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-36">
+            <div class="flex justify-between items-start">
+                <div class="w-10 h-10 rounded-lg bg-blue-500 text-white flex items-center justify-center shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 font-medium mb-1">Sedang Diproses</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ diproses }}</h3>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-36">
+            <div class="flex justify-between items-start">
+                <div class="w-10 h-10 rounded-full bg-green-50 text-green-500 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 font-medium mb-1">Laporan Selesai</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ selesai }}</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Chart Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div class="flex items-center gap-4">
+                <h3 class="text-xl font-bold text-gray-800">Statistik Laporan</h3>
+                <select id="monthPicker" class="hidden appearance-none bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors">
+                    <option value="1">Januari</option>
+                    <option value="2">Februari</option>
+                    <option value="3">Maret</option>
+                    <option value="4">April</option>
+                    <option value="5">Mei</option>
+                    <option value="6">Juni</option>
+                    <option value="7">Juli</option>
+                    <option value="8">Agustus</option>
+                    <option value="9">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+                <select id="weekPicker" class="appearance-none bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors">
+                    <option value="1">Minggu ke-1</option>
+                    <option value="2">Minggu ke-2</option>
+                    <option value="3">Minggu ke-3</option>
+                    <option value="4">Minggu ke-4</option>
+                    <option value="5">Minggu ke-5</option>
+                </select>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <!-- Legend -->
+                <div class="flex items-center gap-4 text-xs text-gray-600 font-medium hidden md:flex">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Menunggu
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> Dalam Proses
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-600"></span> Selesai
+                    </div>
+                </div>
+
+                <!-- Toggle -->
+                <div class="flex bg-gray-100 rounded-lg p-1">
+                    <button id="btnMinggu" class="px-4 py-1.5 text-xs font-semibold bg-white text-blue-600 rounded-md shadow-sm">Minggu</button>
+                    <button id="btnBulan" class="px-4 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700">Bulan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas for Chart.js -->
+        <div class="w-full h-72">
+            <canvas id="laporanChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('laporanChart').getContext('2d');
+        let chartInstance = null;
+        let currentPeriod = 'minggu';
+        let currentMonth = new Date().getMonth() + 1;
+        let currentYear = new Date().getFullYear();
+        let currentWeek = Math.ceil(new Date().getDate() / 7);
+        if (currentWeek > 5) currentWeek = 5;
+        
+        const monthPicker = document.getElementById('monthPicker');
+        const weekPicker = document.getElementById('weekPicker');
+        monthPicker.value = currentMonth;
+        weekPicker.value = currentWeek;
+
+        const btnMinggu = document.getElementById('btnMinggu');
+        const btnBulan = document.getElementById('btnBulan');
+
+        monthPicker.addEventListener('change', (e) => {
+            currentMonth = e.target.value;
+            fetchChartData();
+        });
+
+        weekPicker.addEventListener('change', (e) => {
+            currentWeek = e.target.value;
+            fetchChartData();
+        });
+        
+        function fetchChartData() {
+            fetch(`/api/chart-data/?period=${currentPeriod}&month=${currentMonth}&year=${currentYear}&week=${currentWeek}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Override colors to match User Dashboard design
+                    data.datasets[3].borderColor = '#3b82f6'; // Blue for Menunggu
+                    data.datasets[3].backgroundColor = '#3b82f6';
+                    data.datasets[2].borderColor = '#facc15'; // Yellow for Dalam Proses
+                    data.datasets[2].backgroundColor = '#facc15';
+                    data.datasets[1].borderColor = '#16a34a'; // Green for Selesai
+                    data.datasets[1].backgroundColor = '#16a34a';
+
+                    const config = {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [data.datasets[3], data.datasets[2], data.datasets[1]] // Menunggu, Diproses, Selesai
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false,
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawBorder: false,
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 11
+                                        },
+                                        color: '#6b7280'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    max: 20,
+                                    ticks: {
+                                        stepSize: 5,
+                                        precision: 0,
+                                        font: {
+                                            size: 11
+                                        },
+                                        color: '#6b7280'
+                                    },
+                                    grid: {
+                                        color: '#f3f4f6',
+                                        drawBorder: false,
+                                    }
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest',
+                                axis: 'x',
+                                intersect: false
+                            }
+                        }
+                    };
+
+                    if (chartInstance) {
+                        chartInstance.data = config.data;
+                        chartInstance.update();
+                    } else {
+                        chartInstance = new Chart(ctx, config);
+                    }
+                })
+                .catch(error => console.error('Error fetching chart data:', error));
+        }
+
+        fetchChartData();
+        setInterval(fetchChartData, 30000); // Update every 30 seconds
+
+        btnMinggu.addEventListener('click', () => {
+            currentPeriod = 'minggu';
+            monthPicker.classList.add('hidden');
+            weekPicker.classList.remove('hidden');
+            btnMinggu.className = "px-4 py-1.5 text-xs font-semibold bg-white text-blue-600 rounded-md shadow-sm";
+            btnBulan.className = "px-4 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700";
+            fetchChartData();
+        });
+
+        btnBulan.addEventListener('click', () => {
+            currentPeriod = 'bulan';
+            weekPicker.classList.add('hidden');
+            monthPicker.classList.remove('hidden');
+            btnBulan.className = "px-4 py-1.5 text-xs font-semibold bg-white text-blue-600 rounded-md shadow-sm";
+            btnMinggu.className = "px-4 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700";
+            fetchChartData();
+        });
+    });
+</script>
+{% endblock %}

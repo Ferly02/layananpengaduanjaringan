@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        .register-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .form-input-custom {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            background-color: #e2e8f0;
+            color: #334155;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-input-custom:focus {
+            outline: none;
+            border-color: #0056b3;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+
+        .form-input-custom::placeholder {
+            color: #94a3b8;
+        }
+
+        .btn-register {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            background-color: #0056b3;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .btn-register:hover {
+            background-color: #004494;
+        }
+
+        .register-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .register-footer a {
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .form-group-custom {
+            margin-bottom: 20px;
+        }
+
+        .form-row-custom {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-row-custom .form-group-custom {
+            margin-bottom: 0;
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body class="register-bg">
+    <div class="register-card">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <img src="{% static 'img/logo-diskominfo.png' %}" alt="Logo Diskominfo" style="max-height: 60px; width: auto; object-fit: contain; margin: 0 auto 16px auto;">
+            <h2 style="font-size: 16px; font-weight: 700; color: #1e293b; margin: 0;">Daftar Akun</h2>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                <div class="p-3 text-sm text-red-700 bg-red-100 rounded-lg"
+                    style="margin-bottom: 16px; padding: 12px; background-color: #fee2e2; color: #b91c1c; border-radius: 8px; font-size: 14px;">
+                    {{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="form-group-custom">
+                <label class="form-label-custom">Nama Lengkap</label>
+                <input type="text" name="nama_lengkap" class="form-input-custom" required>
+            </div>
+
+            <div class="form-group-custom">
+                <label class="form-label-custom">Email atau Username</label>
+                <input type="text" name="username_email" class="form-input-custom" placeholder="nama@sintik.id"
+                    required>
+            </div>
+
+            <div class="form-row-custom">
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Kata Sandi</label>
+                    <input type="password" name="password" class="form-input-custom" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Konfirmasi Kata Sandi</label>
+                    <input type="password" name="confirm_password" class="form-input-custom" placeholder="••••••••"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-group-custom" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+            </div>
+
+            <button type="submit" class="btn-register">
+                Daftar Sekarang
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                </svg>
+            </button>
+        </form>
+
+        <div class="register-footer">
+            Sudah punya akun? <a href="{% url 'login_user' %}">Masuk di sini</a>
+        </div>
+    </div>
+</body>
+
+</html>
