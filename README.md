@@ -48,11 +48,11 @@ Sistem Informasi Layanan Pengaduan Jaringan (Helpdesk Jaringan) berbasis web yan
 - **Dashboard Pelapor**
 <br> <img src="screenshot/pelapor/dasboard.jpg" width="800">
 - **Buat Laporan**
-<br> <img src="screenshot/pelapor/buat%20laporan%20.jpg" width="800">
+<br> <img src="screenshot/pelapor/buat_laporan_.jpg" width="800">
 - **Daftar Laporan**
-<br> <img src="screenshot/pelapor/daftar%20laporan.jpg" width="800">
+<br> <img src="screenshot/pelapor/daftar_laporan.jpg" width="800">
 - **Detail Laporan**
-<br> <img src="screenshot/pelapor/detail%20laporan.jpg" width="800">
+<br> <img src="screenshot/pelapor/detail_laporan.jpg" width="800">
 - **Profil Pelapor**
 <br> <img src="screenshot/pelapor/profil.jpg" width="800">
 </details>
@@ -66,9 +66,9 @@ Sistem Informasi Layanan Pengaduan Jaringan (Helpdesk Jaringan) berbasis web yan
 - **Dashboard Teknisi**
 <br> <img src="screenshot/teknisi/dasboard.jpg" width="800">
 - **Daftar Laporan Tugas**
-<br> <img src="screenshot/teknisi/daftar%20laporan.jpg" width="800">
+<br> <img src="screenshot/teknisi/daftar_laporan.jpg" width="800">
 - **Detail & Penanganan Laporan**
-<br> <img src="screenshot/teknisi/detail%20laporan.jpg" width="800">
+<br> <img src="screenshot/teknisi/detail_laporan.jpg" width="800">
 - **Profil Teknisi**
 <br> <img src="screenshot/teknisi/profil.jpg" width="800">
 </details>
@@ -78,15 +78,15 @@ Sistem Informasi Layanan Pengaduan Jaringan (Helpdesk Jaringan) berbasis web yan
 <summary>Lihat Screenshot Admin</summary>
 
 - **Login Admin**
-<br> <img src="screenshot/admin/login%20admin.jpg" width="800">
+<br> <img src="screenshot/admin/login_admin.jpg" width="800">
 - **Dashboard Admin**
 <br> <img src="screenshot/admin/dasboard.png" width="800">
 - **Daftar Seluruh Laporan**
-<br> <img src="screenshot/admin/daftar%20laporan.jpg" width="800">
+<br> <img src="screenshot/admin/daftar_laporan.jpg" width="800">
 - **Detail Laporan (Pantauan Admin)**
-<br> <img src="screenshot/admin/laporan%20detail.png" width="800">
+<br> <img src="screenshot/admin/laporan_detail.png" width="800">
 - **Buat Akun Teknisi**
-<br> <img src="screenshot/admin/buat%20akun%20teknisi%20.jpg" width="800">
+<br> <img src="screenshot/admin/buat_akun_teknisi_.jpg" width="800">
 - **Profil Admin**
 <br> <img src="screenshot/admin/profil.jpg" width="800">
 </details>
