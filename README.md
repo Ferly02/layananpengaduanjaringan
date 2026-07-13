@@ -43,17 +43,28 @@ Sistem Informasi Layanan Pengaduan Jaringan (Helpdesk Jaringan) berbasis web yan
 <details>
 <summary>Lihat Screenshot Pelapor</summary>
 
-- **Login Pelapor**
+- **Login Pelapor**  
+  *Halaman awal bagi pegawai (pelapor) untuk masuk ke dalam sistem menggunakan kredensial email/username.*
 <br> <img src="screenshot/pelapor/login.jpg" width="800">
-- **Dashboard Pelapor**
+
+- **Dashboard Pelapor**  
+  *Menampilkan ringkasan status tiket secara keseluruhan (menunggu, diproses, selesai) agar pelapor dapat memantau dengan cepat.*
 <br> <img src="screenshot/pelapor/dasboard.jpg" width="800">
-- **Buat Laporan**
+
+- **Buat Laporan**  
+  *Formulir pengajuan pengaduan di mana pelapor dapat mengisi judul, memilih kategori kendala, mendeskripsikan detail, dan melampirkan foto.*
 <br> <img src="screenshot/pelapor/buat_laporan_.jpg" width="800">
-- **Daftar Laporan**
+
+- **Daftar Laporan**  
+  *Tabel riwayat seluruh laporan yang pernah diajukan oleh pelapor, lengkap dengan label status warna-warni untuk identifikasi mudah.*
 <br> <img src="screenshot/pelapor/daftar_laporan.jpg" width="800">
-- **Detail Laporan**
+
+- **Detail Laporan**  
+  *Tampilan rincian spesifik satu laporan yang mencakup solusi dari teknisi serta form untuk memberikan rating & ulasan kepuasan pengguna.*
 <br> <img src="screenshot/pelapor/detail_laporan.jpg" width="800">
-- **Profil Pelapor**
+
+- **Profil Pelapor**  
+  *Halaman pengelolaan akun untuk melengkapi data diri, nomor telepon, dan asal bidang/departemen.*
 <br> <img src="screenshot/pelapor/profil.jpg" width="800">
 </details>
 
@@ -61,15 +72,24 @@ Sistem Informasi Layanan Pengaduan Jaringan (Helpdesk Jaringan) berbasis web yan
 <details>
 <summary>Lihat Screenshot Teknisi</summary>
 
-- **Login Teknisi**
+- **Login Teknisi**  
+  *Portal akses yang digunakan oleh staf IT/teknisi jaringan.*
 <br> <img src="screenshot/teknisi/login.jpg" width="800">
-- **Dashboard Teknisi**
+
+- **Dashboard Teknisi**  
+  *Menyajikan statistik performa teknisi berupa jumlah tiket yang masuk dan harus segera dikerjakan (Task Assignment).*
 <br> <img src="screenshot/teknisi/dasboard.jpg" width="800">
-- **Daftar Laporan Tugas**
+
+- **Daftar Laporan Tugas**  
+  *Antrean tiket pengaduan yang ditugaskan khusus kepada teknisi yang sedang login.*
 <br> <img src="screenshot/teknisi/daftar_laporan.jpg" width="800">
-- **Detail & Penanganan Laporan**
+
+- **Detail & Penanganan Laporan**  
+  *Ruang kerja teknisi untuk memproses laporan. Di sini teknisi mengubah status laporan, memasukkan catatan solusi perbaikan, dan mengunggah foto bukti jaringan kembali normal.*
 <br> <img src="screenshot/teknisi/detail_laporan.jpg" width="800">
-- **Profil Teknisi**
+
+- **Profil Teknisi**  
+  *Halaman informasi pribadi milik teknisi jaringan.*
 <br> <img src="screenshot/teknisi/profil.jpg" width="800">
 </details>
 
@@ -77,17 +97,28 @@ Sistem Informasi Layanan Pengaduan Jaringan (Helpdesk Jaringan) berbasis web yan
 <details>
 <summary>Lihat Screenshot Admin</summary>
 
-- **Login Admin**
+- **Login Admin**  
+  *Pintu masuk utama untuk level manajerial / administrator.*
 <br> <img src="screenshot/admin/login_admin.jpg" width="800">
-- **Dashboard Admin**
+
+- **Dashboard Admin**  
+  *Pusat kendali utama (Control Center) yang merangkum keseluruhan data operasional, rasio penyelesaian masalah, serta daftar tiket yang melampaui batas waktu SLA (Service Level Agreement).*
 <br> <img src="screenshot/admin/dasboard.png" width="800">
-- **Daftar Seluruh Laporan**
+
+- **Daftar Seluruh Laporan**  
+  *Tabel komprehensif seluruh tiket lintas bidang dan lintas teknisi untuk kebutuhan pemantauan dan audit.*
 <br> <img src="screenshot/admin/daftar_laporan.jpg" width="800">
-- **Detail Laporan (Pantauan Admin)**
+
+- **Detail Laporan (Pantauan Admin)**  
+  *Pandangan utuh dari suatu tiket yang memungkinkan admin melakukan evaluasi jika penyelesaian dirasa kurang tepat.*
 <br> <img src="screenshot/admin/laporan_detail.png" width="800">
-- **Buat Akun Teknisi**
+
+- **Buat Akun Teknisi**  
+  *Fitur administrasi khusus bagi Admin untuk mendaftarkan akun staf IT baru dengan privilese (hak akses) teknisi.*
 <br> <img src="screenshot/admin/buat_akun_teknisi_.jpg" width="800">
-- **Profil Admin**
+
+- **Profil Admin**  
+  *Halaman pengelolaan data diri administrator.*
 <br> <img src="screenshot/admin/profil.jpg" width="800">
 </details>
 
