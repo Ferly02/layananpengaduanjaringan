@@ -844,7 +844,7 @@ def export_pdf(request):
     import io
 
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=landscape(A4))
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(A4), title="Rekap Laporan SINAR", author="Admin SINAR")
     elements = []
     
     styles = getSampleStyleSheet()
