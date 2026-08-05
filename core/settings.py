@@ -88,10 +88,11 @@ DATABASES = {
 }
 
 if DATABASES['default']['ENGINE'] == 'django.db.backends.mysql':
-    DATABASES['default']['OPTIONS'] = {
+    DATABASES['default'].setdefault('OPTIONS', {})
+    DATABASES['default']['OPTIONS'].update({
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         'charset': 'utf8mb4',
-    }
+    })
 
 
 # Password validation
