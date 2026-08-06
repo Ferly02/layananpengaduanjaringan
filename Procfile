@@ -1,1 +1,1 @@
-web: gunicorn core.wsgi --log-file -
+web: python manage.py migrate && python seed_bidang.py && gunicorn core.wsgi --log-file -
