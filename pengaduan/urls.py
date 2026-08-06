@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    path('seed-db/', views.seed_db, name='seed_db'),
     path('laporan/', views.laporan_list, name='laporan_list'),
     path('buat-laporan/', views.buat_laporan, name='buat_laporan'),
     path('status-laporan/', views.status_laporan, name='status_laporan'),

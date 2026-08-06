@@ -1,4 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+
+def seed_db(request):
+    from .models import Bidang
+    bidang_list = [
+        'Sekretariat',
+        'Informasi dan Komunikasi Publik',
+        'Teknologi Informasi dan Komunikasi',
+        'Statistik',
+        'Persandian'
+    ]
+    created_count = 0
+    for b in bidang_list:
+        obj, created = Bidang.objects.get_or_create(nama=b)
+        if created:
+            created_count += 1
+    return HttpResponse(f"Berhasil! {created_count} bidang ditambahkan ke database.")
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
